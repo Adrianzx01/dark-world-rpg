@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "nome": "Yuji Itadori",
+    "raridade": "SR",
+    "imagem_combate": "assets/images/characters/itadori.gif", 
+    "hp": 150,
+    "energia": 100,
+    "golpes": [
+      {"nome": "Soco Divergente", "dano": 30, "custo": 10},
+      {"nome": "Black Flash", "dano": 70, "custo": 40},
+      {"nome": "Chute Linear", "dano": 20, "custo": 0},
+      {"nome": "Arremesso de Escombros", "dano": 25, "custo": 5}
+    ]
+  },
+  {
+    "id": 2,
+    "nome": "Megumi Fushiguro",
+    "raridade": "SR",
+    "imagem_combate": "assets/images/characters/megumi.gif",
+    "hp": 120,
+    "energia": 120,
+    "golpes": [
+      {"nome": "Cães Divinos", "dano": 35, "custo": 15},
+      {"nome": "Nue (Eletricidade)", "dano": 45, "custo": 25},
+      {"nome": "Sapo (Língua)", "dano": 20, "custo": 10},
+      {"nome": "Exorcismo Simples", "dano": 15, "custo": 0}
+    ]
+  },
+  {
+    "id": 3,
+    "nome": "Satoru Gojo",
+    "raridade": "SSR",
+    "imagem_combate": "assets/images/characters/gojo.gif",
+    "hp": 300,
+    "energia": 500,
+    "golpes": [
+      {"nome": "Azul (Lapso)", "dano": 60, "custo": 30},
+      {"nome": "Vermelho (Reversão)", "dano": 80, "custo": 50},
+      {"nome": "Vazio Roxo", "dano": 200, "custo": 150},
+      {"nome": "Infinito", "dano": 0, "custo": 100}
+    ]
+  }
+]
