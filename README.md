@@ -31,20 +31,20 @@ DarkWorldRPG/
 │   ├── systems/        # Lógica de Gacha, Animação e Combate
 ├── main.py             # Ponto de entrada do aplicativo
 └── .gitignore          # Filtro de arquivos para o Git
-
+```
 ## 🎮 Como Executar 
 
 1. Clone este repositório:
 ```bash
 git clone [https://github.com/Adrianzx01/dark-world-rpg.git](https://github.com/Adrianzx01/dark-world-rpg.git)
-
+```
 2. Instale as dependências necessárias:
 ```bash
 pip install pygame-ce Pillow
-
+```
 3. Inicie o aplicativo:
 ```bash
 python main.py
-
+```
 Desenvolvido por Adrian como um projeto pessoal.
 
