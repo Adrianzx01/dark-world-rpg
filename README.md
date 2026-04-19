@@ -1,8 +1,8 @@
 # Dark World RPG 🌑
 
-**Dark World RPG** é um motor de jogo estilo Gacha e RPG de turnos desenvolvido em Python. Inspirado em mecânicas de jogos clássicos como Pokémon e sistemas de bots de Discord (Mudae), o projeto permite colecionar personagens, gerenciar suas habilidades e enfrentar desafios em um sistema de combate estratégico.
+**Dark World RPG** é um motor de jogo estilo Gacha e RPG de turnos desenvolvido em Python. Inspirado em mecânicas de jogos clássicos como Pokémon e sistemas de Gacha RPG, o projeto permite colecionar personagens, gerenciar suas habilidades e enfrentar desafios em um sistema de combate estratégico.
 
-Embora tenha iniciado com o universo de **Jujutsu Kaisen**, o projeto foi arquitetado para ser um **multiverso aberto**, permitindo a inclusão de qualquer personagem de anime, filme ou criação autoral através de uma estrutura simples de banco de dados JSON.
+Embora tenha iniciado com o universo de **Jujutsu Kaisen** por escolha pessoal, o projeto foi arquitetado para ser um **multiverso aberto**, permitindo a inclusão de qualquer personagem ou criação autoral através de uma estrutura simples de banco de dados JSON.
 
 ---
 
