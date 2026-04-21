@@ -1,0 +1,27 @@
+[
+  {
+    "id": 101,
+    "nome": "Mahito",
+    "raridade": "Chefe",
+    "classe": "Maldição Humana",
+    "imagem_combate": "assets/images/monsters/mahito.gif",
+    "hp": 350,
+    "energia": 400,
+    "golpes": [
+        {"nome": "Transfiguração Inativa", "dano": 120, "custo": 60}
+    ]
+  },
+  {
+    "id": 102,
+    "nome": "Sukuna (1 Dedo)",
+    "raridade": "Lenda",
+    "classe": "Rei das Maldições",
+    "imagem_combate": "assets/images/monsters/sukuna.gif",
+    "hp": 600,
+    "energia": 1000,
+    "golpes": [
+        {"nome": "Clivar", "dano": 80, "custo": 30},
+        {"nome": "Desmantelar", "dano": 50, "custo": 10}
+    ]
+  }
+]

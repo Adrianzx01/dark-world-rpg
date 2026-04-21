@@ -3,17 +3,15 @@ from systems.animator import GifAnimator
 
 class Character:
     def __init__(self, data):
-        self.id = data['id']
-        self.nome = data['nome']
-        self.raridade = data['raridade']
+        self.nome = data.get('nome', 'Desconhecido')
+        self.raridade = data.get('raridade', 'N/A') 
+        self.hp = data.get('hp', 100)
+        self.max_hp = self.hp
+        self.energia = data.get('energia', 50)
+        self.golpes = data.get('golpes', [])
         self.imagem_path = data.get('imagem_combate', '')
-        self.hp_max = data['hp']
-        self.hp_atual = data['hp']
-        self.energia_max = data['energia']
-        self.energia_atual = data['energia']
-        self.golpes = data['golpes']
-        self.superficie_imagem = None
         self.animador = None
+        self.superficie_imagem = None
 
     def carregar_imagem(self, largura_desejada=200):
         if not self.imagem_path:
