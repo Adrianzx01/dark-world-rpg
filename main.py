@@ -32,6 +32,8 @@ estado_jogo = "MENU" # Estados: MENU, GACHA, EQUIPE, BATALHA
 personagem_sorteado = None
 carregar_nova_imagem = False
 cursor_inventario = 0
+animacao_ataque_ativa = None
+tempo_animacao_ataque = 0
 
 # --- FUNÇÕES DE TELA ---
 
@@ -164,92 +166,94 @@ def desenhar_equipe(eventos):
                 estado_jogo = "BATALHA"
 
 def desenhar_batalha(eventos, equipe, vilao):
-    global estado_jogo, progressao, vilao_viva
-    tela.fill((30, 0, 0)) 
+    global estado_jogo, progressao, vilao_viva, animacao_ataque_ativa, tempo_animacao_ataque
     
+    # 1. Fundo
+    tela.fill((20, 20, 25))
+
     if vilao:
+        # --- DESENHAR VILÃO E VIDA ---
         txt_luta = FONTE_PRINCIPAL.render(f"DESAFIO: VS {vilao.nome}", True, BRANCO)
         tela.blit(txt_luta, (LARGURA//2 - txt_luta.get_width()//2, 20))
-        # --- BARRA DE VIDA DO VILÃO ---
-        largura_barra = 200
-        altura_barra = 15
-        x_barra = LARGURA//2 - largura_barra//2
-        y_barra = 80 
-        
-        # Fundo da barra (Vermelho escuro/Preto)
-        pygame.draw.rect(tela, (50, 0, 0), (x_barra, y_barra, largura_barra, altura_barra))
-        
-        # Barra de vida atual (Verde)
-        # Cálculo: (HP Atual / HP Máximo) * Largura Total
-        porcentagem_vida = vilao.hp / vilao.max_hp
-        pygame.draw.rect(tela, (0, 255, 0), (x_barra, y_barra, largura_barra * porcentagem_vida, altura_barra))
-        
-        # Borda da barra
-        pygame.draw.rect(tela, BRANCO, (x_barra, y_barra, largura_barra, altura_barra), 2)
-        
-        # Texto do HP
-        txt_hp = FONTE_PEQUENA.render(f"{vilao.hp} / {vilao.max_hp}", True, BRANCO)
-        tela.blit(txt_hp, (x_barra + largura_barra//2 - txt_hp.get_width()//2, y_barra - 20))
 
-        # Checa vitória
-        if vilao.hp <= 0:
-            txt_vitoria = FONTE_PRINCIPAL.render("VITÓRIA!", True, DOURADO)
-            tela.blit(txt_vitoria, (LARGURA//2 - txt_vitoria.get_width()//2, LARGURA//2))
+        vilao.update_animation()
+        frame_v = vilao.get_frame_for_drawing()
+        if frame_v:
+            tela.blit(frame_v, (LARGURA//2 - frame_v.get_width()//2, 100))
+
+        # Barra de Vida do Vilão
+        pygame.draw.rect(tela, (50, 0, 0), (LARGURA//2 - 100, 80, 200, 15))
+        porcentagem_v = max(0, vilao.hp / vilao.max_hp)
+        pygame.draw.rect(tela, (0, 255, 0), (LARGURA//2 - 100, 80, 200 * porcentagem_v, 15))
+        pygame.draw.rect(tela, BRANCO, (LARGURA//2 - 100, 80, 200, 15), 2)
+
+        # --- DESENHAR EQUIPE (HP E ENERGIA) ---
+        for i, p in enumerate(equipe):
+            y_pos = 400 + (i * 60)
+            txt_p = FONTE_PEQUENA.render(f"{p.nome} (HP: {p.hp})", True, BRANCO)
+            tela.blit(txt_p, (50, y_pos))
             
-            # Se apertar ESPAÇO, vai para o próximo nível
-            aviso_v = FONTE_PEQUENA.render("Pressione ESPAÇO para o Próximo Desafio", True, BRANCO)
-            tela.blit(aviso_v, (LARGURA//2 - aviso_v.get_width()//2, LARGURA//2 + 50))
-            
-            for evento in eventos:
-                if evento.type == pygame.KEYDOWN and evento.key == pygame.K_SPACE:
+            # Barra de Energia Amaldiçoada (CE)
+            pygame.draw.rect(tela, (30, 30, 40), (50, y_pos + 25, 150, 8))
+            porcentagem_ce = p.energia / p.max_energia
+            pygame.draw.rect(tela, (0, 150, 255), (50, y_pos + 25, 150 * porcentagem_ce, 8))
+
+        # --- MENU DE GOLPES (Focado no Heroi 1 - Gojo) ---
+        heroi_ativo = equipe[0]
+        painel = pygame.Rect(300, 390, 470, 180)
+        pygame.draw.rect(tela, (10, 10, 15), painel, border_radius=10)
+        pygame.draw.rect(tela, DOURADO, painel, 2, border_radius=10)
+
+        for idx, golpe in enumerate(heroi_ativo.golpes):
+            cor = BRANCO if heroi_ativo.energia >= golpe['custo'] else (100, 100, 100)
+            txt_g = FONTE_PEQUENA.render(f"{idx+1}. {golpe['nome']} ({golpe['custo']} CE)", True, cor)
+            tela.blit(txt_g, (320, 420 + (idx * 30)))
+
+        # --- LÓGICA DE EVENTOS ---
+        for evento in eventos:
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_m: estado_jogo = "MENU"
+                
+                if vilao.hp <= 0 and evento.key == pygame.K_SPACE:
                     progressao.proximo_nivel()
-                    # Atualiza a variável local para o novo vilão (Sukuna!)
                     vilao_viva = progressao.obter_vilão_atual()
-        
-        # Carrega se for a primeira vez
-        if not vilao.animador or len(vilao.animador.frames) == 0:
-             vilao.carregar_imagem(250)
-        
-        vilao.update_animation() 
-        frame_vilao = vilao.get_frame_for_drawing()
-        if frame_vilao:
-            pos_v = LARGURA//2 - frame_vilao.get_width()//2
-            tela.blit(frame_vilao, (pos_v, 100))
+                    if vilao_viva:
+                        vilao_viva.carregar_imagem(250)
+                
+                elif vilao.hp > 0:
+                    teclas = [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4]
+                    for idx, tecla in enumerate(teclas):
+                        if evento.key == tecla and idx < len(heroi_ativo.golpes):
+                            golpe = heroi_ativo.golpes[idx]
+                            if heroi_ativo.energia >= golpe['custo']:
+                                # Atacar
+                                heroi_ativo.energia -= golpe['custo']
+                                vilao.hp -= golpe['dano']
+                                heroi_ativo.recuperar_energia()
+                                
+                                # Ativar Animação
+                                if 'animacao' in golpe:
+                                    from systems.animator import GifAnimator
+                                    path = os.path.join(os.getcwd(), golpe['animacao'])
+                                    animacao_ataque_ativa = GifAnimator(path, 450)
+                                    tempo_animacao_ataque = 300 # 5 segundos
 
-    # Exibir sua equipe
-    y_equipe = 420
-    for i, p in enumerate(equipe):
-        txt_p = FONTE_PEQUENA.render(f"{i+1}. {p.nome} (HP: {p.hp})", True, BRANCO)
-        tela.blit(txt_p, (50, y_equipe + (i * 30)))
-# --- INTERFACE DE ATAQUE ---
-    txt_instrucao = FONTE_PEQUENA.render("Aperte o número do herói para atacar:", True, BRANCO)
-    tela.blit(txt_instrucao, (50, 380))
+        # --- DESENHAR ANIMAÇÃO DE ATAQUE ---
+        if animacao_ataque_ativa and tempo_animacao_ataque > 0:
+            animacao_ataque_ativa.update()
+            f_skill = animacao_ataque_ativa.get_current_frame()
+            if f_skill:
+                tela.blit(f_skill, (LARGURA//2 - f_skill.get_width()//2, 100))
+            tempo_animacao_ataque -= 1
+        else:
+            animacao_ataque_ativa = None
 
-    for evento in eventos:
-        if evento.type == pygame.KEYDOWN:
-            # Se apertar 1, o primeiro herói ataca, se 2 o segundo...
-            indices_teclas = [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4]
-            
-            for i, tecla in enumerate(indices_teclas):
-                if evento.key == tecla and i < len(equipe):
-                    heroi = equipe[i]
-                    # Calcular dano 
-                    dano = 50 
-                    vilao.hp -= dano
-                    print(f"{heroi.nome} atacou! Dano: {dano}")
-                    
-                    # Garante que o HP não fique negativo
-                    if vilao.hp < 0:
-                        vilao.hp = 0
-    # Botão de fugir
-    voltar = FONTE_PEQUENA.render("Pressione [M] para Fugir", True, (180, 180, 180))
-    tela.blit(voltar, (LARGURA - 220, 560))
-
-    # Captura de teclado para a batalha
-    for evento in eventos:
-        if evento.type == pygame.KEYDOWN:
-            if evento.key == pygame.K_m:
-                estado_jogo = "MENU" 
+        # --- VITÓRIA ---
+        if vilao.hp <= 0:
+            txt_v = FONTE_PRINCIPAL.render("VITÓRIA!", True, DOURADO)
+            tela.blit(txt_v, (LARGURA//2 - txt_v.get_width()//2, 250))
+            txt_s = FONTE_PEQUENA.render("Pressione ESPAÇO para o próximo", True, BRANCO)
+            tela.blit(txt_s, (LARGURA//2 - txt_s.get_width()//2, 320))
 
 def jogo():
     global estado_jogo, inventario, progressao, vilao_viva
@@ -259,6 +263,8 @@ def jogo():
     progressao = ProgressionSystem()
     
     vilao_viva = progressao.obter_vilão_atual()
+    if vilao_viva:
+        vilao_viva.carregar_imagem(250)
 
     rostando = True
     while rostando:

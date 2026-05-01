@@ -32,13 +32,45 @@
     "nome": "Satoru Gojo",
     "raridade": "SSR",
     "imagem_combate": "assets/images/characters/gojo.gif",
-    "hp": 300,
-    "energia": 500,
+    "hp": 500,
+    "max_hp": 500,
+    "energia": 450,
+    "max_energia": 450,
     "golpes": [
-      {"nome": "Azul (Lapso)", "dano": 60, "custo": 30},
-      {"nome": "Vermelho (Reversão)", "dano": 80, "custo": 50},
-      {"nome": "Vazio Roxo", "dano": 200, "custo": 150},
-      {"nome": "Infinito", "dano": 0, "custo": 100}
+        {
+            "nome": "Ao (Azul)",
+            "dano": 80,
+            "custo": 50,
+            "efeito": "stun",
+            "turnos_efeito": 1,
+            "descricao": "Causa 80 de dano e stun por 1 turno.",
+            "animacao": "assets/images/skills/gojo_azul.gif"
+        },
+        {
+            "nome": "Aka (Vermelho)",
+            "dano": 160,
+            "custo": 120,
+            "efeito": null,
+            "descricao": "Causa 160 de dano.",
+            "animacao": "assets/images/skills/gojo_vermelho.gif"
+        },
+        {
+            "nome": "Kyoshiki Murasaki (Vazio Roxo)",
+            "dano": 300,
+            "custo": 250,
+            "efeito": null,
+            "descricao": "Causa 300 de dano.",
+            "animacao": "assets/images/skills/gojo_roxo.gif"
+        },
+        {
+            "nome": "Muryo Kusho (Vazio Infinito)",
+            "dano": 0,
+            "custo": 300,
+            "efeito": "stun",
+            "turnos_efeito": 3,
+            "descricao": "Causa Stun no oponente por 3 turnos.",
+            "animacao": "assets/images/skills/gojo_expansao.gif"
+        }
     ]
-  }
+}
 ]
