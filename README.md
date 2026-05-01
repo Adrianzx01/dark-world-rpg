@@ -36,7 +36,7 @@ DarkWorldRPG/
 
 1. Clone este repositório:
 ```bash
-git clone [https://github.com/Adrianzx01/dark-world-rpg.git](https://github.com/Adrianzx01/dark-world-rpg.git)
+git clone [https://github.com/Adrianzx01/dark-world-rpg.git]
 ```
 2. Instale as dependências necessárias:
 ```bash
